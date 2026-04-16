@@ -1,0 +1,22 @@
+# render.yaml — Render.com deployment config
+# Drop this in the repo root. Render reads it automatically.
+# Deploys the backend as a Web Service using the Dockerfile.
+
+services:
+  - type: web
+    name: codesync-backend
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    envVars:
+      - key: PORT
+        value: 3001
+      - key: JWT_SECRET
+        generateValue: true          # Render auto-generates a secure secret
+      - key: ROOM_EXPIRY_MS
+        value: 1800000
+      - key: MAX_USERS_PER_ROOM
+        value: 5
+      - key: CLIENT_URL
+        sync: false                  # Set this manually after Netlify gives you a URL
+    healthCheckPath: /api/health

@@ -1,0 +1,60 @@
+/* RoomPage.module.css */
+.layout { display:flex; flex-direction:column; height:100vh; overflow:hidden; }
+.body { display:flex; flex:1; min-height:0; overflow:hidden; }
+
+.sidebar {
+  width:46px; background:var(--s1); border-right:1px solid var(--bd);
+  display:flex; flex-direction:column; align-items:center;
+  padding:10px 0; gap:4px; flex-shrink:0;
+}
+.sbBtn {
+  width:32px; height:32px; border-radius:9px; border:none;
+  background:transparent; font-size:15px; color:var(--tx3);
+  cursor:pointer; display:flex; align-items:center; justify-content:center;
+  transition:all .15s; position:relative;
+}
+.sbBtn:hover { background:var(--s3); color:var(--tx2); }
+.sbOn { background:var(--s3); color:var(--acc); }
+.sbOn::before {
+  content:''; position:absolute; left:-2px; top:50%; transform:translateY(-50%);
+  width:3px; height:16px; background:var(--acc); border-radius:0 2px 2px 0;
+}
+
+.editorCol { flex:1; display:flex; flex-direction:column; min-width:0; overflow:hidden; }
+
+.replayScrubber {
+  display:flex; align-items:center; gap:10px; padding:7px 14px;
+  background:rgba(109,40,217,.1); border-top:1px solid rgba(109,40,217,.22); flex-shrink:0;
+}
+.rpPlay {
+  width:26px; height:26px; border-radius:50%; background:var(--acc2); border:none;
+  color:#fff; font-size:10px; cursor:pointer; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center; transition:opacity .15s;
+}
+.rpPlay:hover { opacity:.82; }
+.rpSlider { flex:1; accent-color:var(--acc2); cursor:pointer; }
+.rpCount { font-size:11px; color:var(--tx3); font-family:var(--mono); white-space:nowrap; }
+.rpExit {
+  padding:3px 10px; background:var(--s2); border:1px solid var(--bd2);
+  border-radius:6px; font-size:11px; color:var(--tx2); cursor:pointer;
+  font-family:var(--ui); transition:color .15s;
+}
+.rpExit:hover { color:var(--tx1); }
+
+.rightPanel {
+  width:268px; background:var(--s1); border-left:1px solid var(--bd);
+  display:flex; flex-direction:column; flex-shrink:0; overflow:hidden;
+}
+
+.centerPage {
+  height:100vh; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:12px; background:var(--bg);
+}
+.errCard {
+  text-align:center; max-width:340px; padding:34px 26px;
+  background:var(--s1); border:1px solid var(--bd2);
+  border-radius:var(--r-xl); box-shadow:var(--shadow);
+}
+.errCard h2 { font-size:17px; font-weight:700; margin-bottom:8px; }
+.errCard p  { font-size:13px; color:var(--tx2); margin-bottom:20px; line-height:1.5; }
+.errIcon { font-size:30px; margin-bottom:12px; }

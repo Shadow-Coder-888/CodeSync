@@ -1,0 +1,25 @@
+/* ChatPanel.module.css */
+.panel { display:flex; flex-direction:column; height:100%; overflow:hidden; }
+.header { display:flex; align-items:center; justify-content:space-between; padding:11px 13px 9px; border-bottom:1px solid var(--bd); flex-shrink:0; }
+.title { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.8px; color:var(--tx3); }
+.msgs { flex:1; overflow-y:auto; padding:10px 12px; display:flex; flex-direction:column; gap:10px; }
+.empty { text-align:center; color:var(--tx3); font-size:12px; padding:32px 16px; line-height:1.8; }
+.row { display:flex; gap:7px; align-items:flex-end; }
+.rowMe { flex-direction:row-reverse; }
+.av { width:24px; height:24px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:9px; font-weight:800; flex-shrink:0; }
+.content { max-width:78%; display:flex; flex-direction:column; gap:2px; }
+.meta { display:flex; align-items:baseline; gap:5px; }
+.metaR { display:flex; justify-content:flex-end; }
+.uname { font-size:10px; font-weight:700; }
+.time { font-size:9px; color:var(--tx3); }
+.bubble { padding:7px 10px; border-radius:10px; font-size:12px; line-height:1.5; word-break:break-word; }
+.bubbleThem { background:var(--s2); color:var(--tx1); border-radius:2px 10px 10px 10px; }
+.bubbleMe   { background:var(--acc); color:#fff; border-radius:10px 2px 10px 10px; }
+.inputArea { padding:9px 12px; border-top:1px solid var(--bd); flex-shrink:0; }
+.inputWrap { display:flex; align-items:center; gap:6px; background:var(--s2); border:1px solid var(--bd2); border-radius:var(--r); padding:5px 7px 5px 11px; transition:border-color .2s; }
+.inputWrap:focus-within { border-color:var(--acc); }
+.input { flex:1; background:transparent; border:none; outline:none; font-size:12px; color:var(--tx1); font-family:var(--ui); }
+.input::placeholder { color:var(--tx3); }
+.sendBtn { width:26px; height:26px; border-radius:7px; background:var(--acc); border:none; color:#fff; font-size:12px; display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0; transition:opacity .15s; }
+.sendBtn:hover:not(:disabled) { opacity:.85; }
+.sendBtn:disabled { opacity:.35; cursor:not-allowed; }

@@ -1,0 +1,16 @@
+# netlify.toml — Netlify deployment config
+# Drop in repo root. Netlify reads it automatically.
+
+[build]
+  base    = "frontend"
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# SPA routing — all paths served by index.html
+[[redirects]]
+  from   = "/*"
+  to     = "/index.html"
+  status = 200
