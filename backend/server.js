@@ -17,18 +17,14 @@ const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173';
 const allowedOrigins = CLIENT_URL.split(',').map(s => s.trim());
 
 const corsOptions = {
-  origin: (origin, cb) => {
-    // Allow requests with no origin (curl, Postman, mobile apps)
-    if (!origin || allowedOrigins.includes(origin)) return cb(null, true);
-    cb(new Error(`CORS: origin ${origin} not allowed`));
-  },
+  origin: true,
   methods: ['GET', 'POST', 'DELETE', 'OPTIONS'],
   credentials: false,
 };
 
 const io = new Server(server, {
   cors: {
-    origin: allowedOrigins,
+    origin: true,
     methods: ['GET', 'POST'],
   },
 });
