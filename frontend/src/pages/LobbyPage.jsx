@@ -6,7 +6,7 @@ import { useTheme } from '../hooks/useTheme.jsx';
 import { useAuth }  from '../hooks/useAuth.jsx';
 import s from './LobbyPage.module.css';
 
-const API = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3001';
+const API = import.meta.env.VITE_BACKEND_URL || '';
 
 export default function LobbyPage() {
   const navigate = useNavigate();

@@ -3,7 +3,7 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import { io } from 'socket.io-client';
 import axios from 'axios';
 
-const BACKEND = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3001';
+const BACKEND = import.meta.env.VITE_BACKEND_URL || '';
 
 const EV = {
   ROOM_JOIN:        'room:join',
