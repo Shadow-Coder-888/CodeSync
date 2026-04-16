@@ -46,7 +46,9 @@ export function useRoom(roomId, username, userId) {
   useEffect(() => {
     if (!roomId || !username) return;
 
-    const socket = io(BACKEND, {
+    const socketUrl = BACKEND || window.location.origin;
+
+    const socket = io(socketUrl, {
       transports: ['websocket', 'polling'],
       reconnectionAttempts: 5,
       withCredentials: false,
