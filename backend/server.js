@@ -2,6 +2,7 @@
 require('dotenv').config();
 const express    = require('express');
 const http       = require('http');
+const path       = require('path');
 const { Server } = require('socket.io');
 const cors       = require('cors');
 const rateLimit  = require('express-rate-limit');
@@ -53,6 +54,14 @@ app.use('/api/snippets',require('./routes/snippets'));
 
 app.get('/api/health', (_, res) => {
   res.json({ ok: true, ts: new Date().toISOString() });
+});
+
+// Serve frontend static files
+app.use(express.static(path.join(__dirname, '../frontend/dist')));
+
+// Catch-all: send index.html for any non-API route (React Router)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/dist', 'index.html'));
 });
 
 initSocketHandlers(io);
