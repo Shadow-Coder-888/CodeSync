@@ -3,7 +3,7 @@ services:
     name: codesync-backend
     runtime: docker
     dockerfilePath: ./backend/Dockerfile
-    dockerContext: .          # <-- change from ./backend to .
+    dockerContext: .
     envVars:
       - key: PORT
         value: 3001
