@@ -26,8 +26,8 @@ COPY backend/package.json backend/package-lock.json* ./
 RUN npm install --omit=dev
 COPY backend/ ./
 
-# Copy the built frontend where server.js expects it
-COPY --from=0 /build/frontend/dist ../frontend/dist
+# Copy the built frontend where server.js expects it (/frontend/dist)
+RUN mkdir -p /frontend && cp -r /build/frontend/dist /frontend/dist
 
 EXPOSE 3001
 CMD ["node", "server.js"]
