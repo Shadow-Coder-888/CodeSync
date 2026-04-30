@@ -27,7 +27,6 @@ const EV = {
 export function useRoom(roomId, username, userId) {
   const socketRef   = useRef(null);
   const codeRef     = useRef('');
-  const snapTimerRef = useRef(null);
 
   const [connected,  setConnected]  = useState(false);
   const [joined,     setJoined]     = useState(false);
@@ -41,7 +40,6 @@ export function useRoom(roomId, username, userId) {
   const [output,     setOutput]     = useState(null);
   const [isRunning,  setIsRunning]  = useState(false);
   const [runBy,      setRunBy]      = useState(null);
-  const [snapshots,  setSnapshots]  = useState([]);
 
   useEffect(() => {
     if (!roomId || !username) return;
@@ -112,17 +110,7 @@ export function useRoom(roomId, username, userId) {
       setOutput(null);
     });
 
-    socket.on(EV.REPLAY_DATA, ({ snapshots: snaps }) => setSnapshots(snaps));
-
-    // Periodic snapshot for replay
-    snapTimerRef.current = setInterval(() => {
-      if (socket.connected) {
-        socket.emit(EV.REPLAY_SNAPSHOT, { roomId, code: codeRef.current });
-      }
-    }, 5000);
-
     return () => {
-      clearInterval(snapTimerRef.current);
       socket.disconnect();
     };
   }, [roomId, username]);
@@ -146,11 +134,7 @@ export function useRoom(roomId, username, userId) {
     if (text?.trim()) socketRef.current?.emit(EV.CHAT_MESSAGE, { roomId, text });
   }, [roomId]);
 
-  const requestReplay = useCallback(() => {
-    socketRef.current?.emit(EV.REPLAY_REQUEST, { roomId });
-  }, [roomId]);
-
-  // Real execution — posts code to backend which calls Judge0
+  // Real execution — posts code to backend
   const runCode = useCallback(async () => {
     if (isRunning) return;
     socketRef.current?.emit(EV.CODE_RUN, { roomId });
@@ -193,6 +177,5 @@ export function useRoom(roomId, username, userId) {
     messages, sendMessage,
     cursors, emitCursor,
     output, isRunning, runBy, runCode,
-    snapshots, requestReplay,
   };
 }

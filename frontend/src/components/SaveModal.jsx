@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../hooks/useAuth.jsx';
 import s from './SaveModal.module.css';
 
-const API = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3001';
+const API = import.meta.env.VITE_BACKEND_URL || '';
 
 export default function SaveModal({ code, language, onClose }) {
   const { authAxios } = useAuth();

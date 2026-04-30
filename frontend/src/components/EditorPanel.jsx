@@ -3,8 +3,8 @@ import React, { useRef, useEffect } from 'react';
 import Editor from '@monaco-editor/react';
 import s from './EditorPanel.module.css';
 
-const MONO_LANG = { javascript:'javascript', python:'python', cpp:'cpp', typescript:'typescript', go:'go', java:'java', rust:'rust' };
-const TAB_NAME  = { javascript:'main.js', python:'main.py', cpp:'main.cpp', typescript:'main.ts', go:'main.go', java:'Main.java', rust:'main.rs' };
+const MONO_LANG = { javascript:'javascript', python:'python', cpp:'cpp', typescript:'typescript', java:'java' };
+const TAB_NAME  = { javascript:'main.js', python:'main.py', cpp:'main.cpp', typescript:'main.ts', java:'Main.java' };
 
 export default function EditorPanel({ code, language, onChange, onCursorChange, remoteCursors, readOnly, theme }) {
   const editorRef = useRef(null);
@@ -43,7 +43,6 @@ export default function EditorPanel({ code, language, onChange, onCursorChange, 
           <span className={s.tabDot} style={{ background: 'var(--acc)' }} />
           {TAB_NAME[language] || 'main.js'}
         </div>
-        {readOnly && <span className="badge badge-amber" style={{ marginLeft: 'auto' }}>⏮ Replay mode</span>}
       </div>
       <div className={s.editorWrap}>
         <Editor

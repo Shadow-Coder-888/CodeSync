@@ -156,19 +156,7 @@ export default function LobbyPage() {
           </div>
         )}
 
-        <div className={s.features}>
-          {[
-            ['👥', 'Up to 5 users per room'],
-            ['⚡', 'Real-time sync'],
-            ['🔒', 'Sandboxed execution'],
-            ['⏮',  'Session replay'],
-          ].map(([icon, text]) => (
-            <div key={text} className={s.feat}>
-              <span className={s.featIcon}>{icon}</span>
-              <span>{text}</span>
-            </div>
-          ))}
-        </div>
+
       </div>
     </div>
   );
