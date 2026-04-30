@@ -16,6 +16,13 @@ const EVENTS = {
   REPLAY_DATA:      'replay:data',
   CODE_RUNNING:     'code:running',
   CODE_RUN:         'code:run',
+  // Interactive terminal
+  TERM_START:       'term:start',
+  TERM_OUTPUT:      'term:output',
+  TERM_INPUT:       'term:input',
+  TERM_DONE:        'term:done',
+  TERM_ERROR:       'term:error',
+  TERM_KILL:        'term:kill',
 };
 
 const LIMITS = {

@@ -1,130 +1,142 @@
-/* OutputPanel.module.css */
-.panel { height:160px; background:var(--s1); border-top:1px solid var(--bd); display:flex; flex-direction:column; flex-shrink:0; }
-.header { display:flex; align-items:center; justify-content:space-between; padding:0 12px; height:32px; border-bottom:1px solid var(--bd); flex-shrink:0; }
-.tabs { display:flex; }
-.tab { padding:0 10px; height:32px; background:transparent; border:none; font-size:11px; font-family:var(--ui); color:var(--tx3); cursor:pointer; border-bottom:2px solid transparent; transition:all .15s; }
-.tab:hover { color:var(--tx2); }
-.tabOn { color:var(--tx1) !important; border-bottom-color:var(--grn) !important; }
-.right { display:flex; align-items:center; gap:8px; }
-.runningTag { display:flex; align-items:center; gap:5px; font-size:11px; color:var(--amb); }
-.runDot { width:6px; height:6px; border-radius:50%; background:var(--amb); animation:pulse 1s infinite; flex-shrink:0; }
-.body { flex:1; overflow-y:auto; padding:8px 12px; display:flex; flex-direction:column; gap:1px; }
-.muted   { color:var(--tx3); }
-.success { color:var(--tx2); }
-.error   { color:var(--red); }
-.info    { color:var(--acc); }
-.divider { height:1px; background:var(--bd); margin:4px 0; }
+/* OutputPanel.module.css — Terminal style */
 
-/* ── Input tab ── */
-.inputTab {
+.terminal {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  height: 100%;
-}
-.inputHint {
-  font-size: 11px;
-  color: var(--tx3);
-  line-height: 1.6;
-  padding: 4px 0;
-}
-.inputHint code {
-  background: var(--s2);
-  padding: 1px 5px;
-  border-radius: 3px;
+  height: 220px;
+  background: #0d1117;
+  border-top: 1px solid #30363d;
   font-family: var(--mono);
-  font-size: 10px;
+  cursor: text;
+  flex-shrink: 0;
 }
-.stdinArea {
-  flex: 1;
-  min-height: 90px;
-  background: var(--s2);
-  border: 1px solid var(--bd2);
-  border-radius: var(--r);
-  padding: 10px;
-  font-family: var(--mono);
-  font-size: 12px;
-  color: var(--tx1);
-  resize: none;
-  outline: none;
-  line-height: 1.6;
-  transition: border-color .2s;
-}
-.stdinArea:focus { border-color: var(--acc); }
-.stdinArea::placeholder { color: var(--tx3); }
 
-.runFromInput {
-  background: var(--acc);
+/* Header */
+.termHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 10px;
+  background: #161b22;
+  border-bottom: 1px solid #30363d;
+  flex-shrink: 0;
+}
+.termDots { display: flex; gap: 5px; }
+.dot { width: 10px; height: 10px; border-radius: 50%; }
+.termTitle {
+  flex: 1;
+  font-size: 11px;
+  color: #8b949e;
+  text-align: center;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+.termActions { display: flex; gap: 6px; }
+
+.runBtn2 {
+  background: #238636;
   color: #fff;
   border: none;
-  border-radius: var(--r);
-  padding: 7px 14px;
-  font-size: 12px;
+  border-radius: 5px;
+  padding: 3px 10px;
+  font-size: 11px;
   font-weight: 600;
   cursor: pointer;
   transition: opacity .15s;
-  align-self: flex-end;
 }
-.runFromInput:hover:not(:disabled) { opacity: .85; }
-.runFromInput:disabled { opacity: .4; cursor: not-allowed; }
+.runBtn2:hover { opacity: .85; }
 
-/* dot indicator on Input tab when stdin has content */
-.inputDot {
-  display: inline-block;
-  width: 5px; height: 5px;
-  border-radius: 50%;
-  background: var(--acc);
-  margin-left: 3px;
-  vertical-align: middle;
+.killBtn {
+  background: #da3633;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 3px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity .15s;
+}
+.killBtn:hover { opacity: .85; }
+
+/* Body — scrollable output */
+.termBody {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  scrollbar-width: thin;
+  scrollbar-color: #30363d transparent;
+}
+.termBody::-webkit-scrollbar { width: 5px; }
+.termBody::-webkit-scrollbar-thumb { background: #30363d; border-radius: 3px; }
+
+.termHint {
+  color: #484f58;
+  font-size: 12px;
+}
+.termHint kbd {
+  background: #21262d;
+  border: 1px solid #30363d;
+  border-radius: 4px;
+  padding: 1px 6px;
+  font-size: 11px;
+  color: #8b949e;
 }
 
-/* Input warn dot — orange pulsing dot when code uses input but stdin is empty */
-.inputWarnDot {
-  display: inline-block;
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: #f59e0b;
-  margin-left: 4px;
-  vertical-align: middle;
-  animation: pulse 1.4s infinite;
+/* Output lines */
+.outLine {
+  color: #e6edf3;
+  font-size: 12.5px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+.errLine {
+  color: #f85149;
+  font-size: 12.5px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+.metaLine {
+  color: #484f58;
+  font-size: 11px;
+  line-height: 1.8;
+  white-space: pre-wrap;
+  border-top: 1px solid #21262d;
+  margin-top: 4px;
+  padding-top: 4px;
 }
 
-/* EOFError nudge banner */
-.nudge {
+/* Live input line */
+.inputLine {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  background: #f59e0b18;
-  border: 1px solid #f59e0b55;
-  border-radius: 7px;
-  padding: 8px 12px;
+  gap: 8px;
+  margin-top: 2px;
+}
+.prompt {
+  color: #3fb950;
   font-size: 12px;
-  color: #f59e0b;
-  margin-bottom: 8px;
-  flex-wrap: wrap;
+  flex-shrink: 0;
+  animation: blink 1s step-end infinite;
 }
-.nudge code {
-  background: #f59e0b22;
-  padding: 1px 5px;
-  border-radius: 4px;
-  font-family: var(--mono);
-  font-size: 11px;
-}
-.nudgeBtn {
-  background: #f59e0b;
-  color: #000;
+.termInput {
+  flex: 1;
+  background: transparent;
   border: none;
-  border-radius: 6px;
-  padding: 4px 10px;
-  font-size: 11px;
-  font-weight: 700;
-  cursor: pointer;
-  white-space: nowrap;
+  outline: none;
+  color: #3fb950;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  caret-color: #3fb950;
 }
-.nudgeBtn:hover { opacity: 0.85; }
+.termInput::placeholder { color: #484f58; }
 
-@keyframes pulse {
+@keyframes blink {
   0%, 100% { opacity: 1; }
-  50%       { opacity: 0.3; }
+  50%       { opacity: 0; }
 }

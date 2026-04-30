@@ -22,6 +22,12 @@ const EV = {
   REPLAY_DATA:      'replay:data',
   CODE_RUNNING:     'code:running',
   CODE_RUN:         'code:run',
+  TERM_START:       'term:start',
+  TERM_OUTPUT:      'term:output',
+  TERM_INPUT:       'term:input',
+  TERM_DONE:        'term:done',
+  TERM_ERROR:       'term:error',
+  TERM_KILL:        'term:kill',
 };
 
 export function useRoom(roomId, username, userId) {
@@ -40,6 +46,9 @@ export function useRoom(roomId, username, userId) {
   const [output,     setOutput]     = useState(null);
   const [isRunning,  setIsRunning]  = useState(false);
   const [runBy,      setRunBy]      = useState(null);
+  // Interactive terminal
+  const [termLines,  setTermLines]  = useState([]);
+  const [termRunning,setTermRunning]= useState(false);
 
   useEffect(() => {
     if (!roomId || !username) return;
@@ -108,6 +117,30 @@ export function useRoom(roomId, username, userId) {
       setIsRunning(true);
       setRunBy(triggeredBy);
       setOutput(null);
+      // Clear terminal for new run
+      setTermLines([]);
+      setTermRunning(true);
+    });
+
+    socket.on(EV.TERM_OUTPUT, ({ text, isErr }) => {
+      setTermLines(prev => [...prev, { text, isErr: !!isErr }]);
+    });
+
+    socket.on(EV.TERM_DONE, ({ exitCode }) => {
+      setTermRunning(false);
+      setIsRunning(false);
+      setRunBy(null);
+      setTermLines(prev => [...prev, {
+        text: `\nProcess exited with code ${exitCode}`,
+        isErr: exitCode !== 0,
+        isMeta: true,
+      }]);
+    });
+
+    socket.on(EV.TERM_ERROR, ({ text }) => {
+      setTermRunning(false);
+      setIsRunning(false);
+      setTermLines(prev => [...prev, { text, isErr: true }]);
     });
 
     return () => {
@@ -134,8 +167,27 @@ export function useRoom(roomId, username, userId) {
     if (text?.trim()) socketRef.current?.emit(EV.CHAT_MESSAGE, { roomId, text });
   }, [roomId]);
 
-  // Real execution — posts code to backend
-  const runCode = useCallback(async (stdin = '') => {
+  // Interactive terminal execution via socket
+  const startTerm = useCallback(() => {
+    if (isRunning) return;
+    setTermLines([]);
+    setTermRunning(true);
+    socketRef.current?.emit(EV.TERM_START, {
+      roomId,
+      code: codeRef.current,
+      language,
+    });
+  }, [roomId, language, isRunning]);
+
+  const sendTermInput = useCallback((text) => {
+    socketRef.current?.emit(EV.TERM_INPUT, { text });
+  }, []);
+
+  const killTerm = useCallback(() => {
+    socketRef.current?.emit(EV.TERM_KILL);
+    setTermRunning(false);
+    setIsRunning(false);
+  }, []);
     if (isRunning) return;
     socketRef.current?.emit(EV.CODE_RUN, { roomId });
     setIsRunning(true);
@@ -178,5 +230,7 @@ export function useRoom(roomId, username, userId) {
     messages, sendMessage,
     cursors, emitCursor,
     output, isRunning, runBy, runCode,
+    // Interactive terminal
+    termLines, termRunning, startTerm, sendTermInput, killTerm,
   };
 }
