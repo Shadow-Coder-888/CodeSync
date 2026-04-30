@@ -69,6 +69,10 @@ export default function EditorPanel({ code, language, onChange, onCursorChange, 
             insertSpaces: true,
             bracketPairColorization: { enabled: true },
             guides: { bracketPairs: true },
+            // Clipboard — allow copy/paste from outside the browser
+            copyWithSyntaxHighlighting: false,
+            contextmenu: true,
+            find: { clipboardCopyAction: 'always' },
           }}
         />
       </div>

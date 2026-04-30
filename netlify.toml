@@ -14,3 +14,10 @@
   from   = "/*"
   to     = "/index.html"
   status = 200
+
+# Security + clipboard headers
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Permissions-Policy = "clipboard-read=*, clipboard-write=*"
+    Cross-Origin-Opener-Policy = "same-origin"
