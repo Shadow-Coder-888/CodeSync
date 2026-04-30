@@ -101,6 +101,7 @@ export default function RoomPage() {
             onRun={room.runCode}
             stdin={stdin}
             onStdinChange={setStdin}
+            code={room.code}
           />
         </div>
 
