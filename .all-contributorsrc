@@ -1,0 +1,12 @@
+{
+  "projectName": "CodeSync",
+  "projectOwner": "Shadow-Coder-888",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": [],
+  "imageSize": 100,
+  "commit": false,
+  "contributorsPerLine": 7,
+  "skipCi": true,
+  "contributors": []
+}
