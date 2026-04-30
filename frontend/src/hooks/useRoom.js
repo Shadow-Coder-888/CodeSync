@@ -1,7 +1,6 @@
 // src/hooks/useRoom.js
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { io } from 'socket.io-client';
-import axios from 'axios';
 
 const BACKEND = import.meta.env.VITE_BACKEND_URL || '';
 
@@ -188,39 +187,6 @@ export function useRoom(roomId, username, userId) {
     setTermRunning(false);
     setIsRunning(false);
   }, []);
-    if (isRunning) return;
-    socketRef.current?.emit(EV.CODE_RUN, { roomId });
-    setIsRunning(true);
-    setOutput(null);
-    try {
-      const res = await axios.post(`${BACKEND}/api/execute`, {
-        code: codeRef.current,
-        language,
-        stdin,
-      });
-      const d = res.data;
-      setOutput({
-        stdout:   d.stdout  || '',
-        stderr:   d.stderr  || '',
-        status:   d.status?.description || 'Done',
-        statusId: d.status?.id,
-        time:     d.time,
-        memory:   d.memory,
-        success:  d.success ?? (!d.stderr && !!d.stdout),
-      });
-    } catch (err) {
-      setOutput({
-        stdout: '',
-        stderr: err.response?.data?.error || err.message || 'Execution failed.',
-        status: 'Error',
-        statusId: 0,
-        success: false,
-      });
-    } finally {
-      setIsRunning(false);
-      setRunBy(null);
-    }
-  }, [language, roomId, isRunning]);
 
   return {
     connected, joined, error,
@@ -229,7 +195,7 @@ export function useRoom(roomId, username, userId) {
     language, emitLang,
     messages, sendMessage,
     cursors, emitCursor,
-    output, isRunning, runBy, runCode,
+    output, isRunning, runBy,
     // Interactive terminal
     termLines, termRunning, startTerm, sendTermInput, killTerm,
   };
