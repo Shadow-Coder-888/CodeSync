@@ -5,11 +5,11 @@
 ![CodeSync](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square)
 ![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)
 ![Node](https://img.shields.io/badge/node-18%2B-brightgreen?style=flat-square)
-![Languages](https://img.shields.io/badge/languages-7-orange?style=flat-square)
+![Languages](https://img.shields.io/badge/languages-5-orange?style=flat-square)
 
 ---
 
-## Why We Built This
+## Why I Built This
 
 Every developer has been there.
 
@@ -19,7 +19,7 @@ Technical interviews are worse. The candidate pastes code into a Google Doc. The
 
 **Collaborative coding tools exist, but they're either expensive, require API keys, rely on third-party execution sandboxes, or gate the most useful features behind subscriptions.** The free options are read-only. The good ones cost money.
 
-We built CodeSync to solve this properly.
+I built CodeSync to solve this properly.
 
 ---
 
@@ -33,11 +33,11 @@ Everything runs on your own server. The code execution engine is self-hosted: yo
 
 | Problem | CodeSync's Answer |
 |---|---|
-| Collaborative editors don't run code | Full execution engine built in — 7 languages |
+| Collaborative editors don't run code | Full execution engine built in — 5 languages |
 | Execution APIs cost money or have rate limits | Self-hosted: runs directly on the server |
 | Sign-up walls kill momentum | Instant rooms — join with just a name |
 | Shared screens are read-only | Real bidirectional editing with live cursor sync |
-| Code pasted into chat loses context | Persistent room state + session replay |
+| Code pasted into chat loses context | Persistent room state |
 | Snippets disappear after the session | Optional accounts to save your work |
 
 ---
@@ -45,11 +45,11 @@ Everything runs on your own server. The code execution engine is self-hosted: yo
 ## Features
 
 - **Instant rooms** — create or join a room in seconds, no account needed
-- **Monaco Editor** — the same engine that powers VS Code, with syntax highlighting for all 7 languages
+- **Monaco Editor** — the same engine that powers VS Code, with syntax highlighting for all 5 languages
 - **Real code execution** — runs on your server, not a third-party API
 - **Live cursor sync** — see exactly where your collaborator is typing
 - **Integrated chat** — keeps conversation and code in the same window
-- **Session replay** — auto-snapshots every 5 seconds so nothing is lost
+- **File manager** — create, name, and save multiple files per session
 - **Snippet library** — register an account to save and revisit your code
 - **Dark / Light mode** — because it matters
 
@@ -63,9 +63,7 @@ Everything runs on your own server. The code execution engine is self-hosted: yo
 | TypeScript | ts-node |
 | Python | Python 3 |
 | C++ | g++ |
-| Go | Go compiler |
 | Java | JDK (javac + java) |
-| Rust | rustc |
 
 All runtimes are bundled inside the Docker image — no manual installation needed on Render or any Docker host.
 
@@ -109,7 +107,7 @@ npm run dev
 ### Run with Docker (all runtimes included)
 
 ```bash
-# Build the image — installs all 7 language runtimes inside it
+# Build the image — installs all 5 language runtimes inside it
 npm run docker:build
 
 # Run
@@ -180,7 +178,7 @@ codesync/
 │   │   └── userStore.js        In-memory user + snippet store
 │   ├── middleware/
 │   │   └── auth.js             JWT verification middleware
-│   ├── Dockerfile              All 7 language runtimes in one image
+│   ├── Dockerfile              All 5 language runtimes in one image
 │   └── server.js               Express + Socket.IO entry point
 ├── shared/
 │   └── constants.js            Socket event names + limits (shared by both)

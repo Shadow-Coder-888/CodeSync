@@ -46,22 +46,10 @@ const RUNNERS = {
       return `g++ -O2 -o "${bin}" "${src}" && "${bin}"`;
     },
   },
-  go: {
-    filename: 'main.go',
-    runner:   (dir) => `go run "${path.join(dir,'main.go')}"`,
-  },
   java: {
     filename: 'Main.java',
     // javac produces Main.class in the same dir; then java -cp dir Main
     runner:   (dir) => `javac "${path.join(dir,'Main.java')}" && java -cp "${dir}" Main`,
-  },
-  rust: {
-    filename: 'main.rs',
-    runner:   (dir) => {
-      const src = path.join(dir,'main.rs');
-      const bin = path.join(dir,'main_bin');
-      return `rustc "${src}" -o "${bin}" && "${bin}"`;
-    },
   },
 };
 
@@ -97,9 +85,7 @@ router.post('/', async (req, res) => {
     typescript: 'ts-node',
     python:     'python3',
     cpp:        'g++',
-    go:         'go',
     java:       'javac',
-    rust:       'rustc',
   };
   const rt = runtimeMap[language];
   if (rt && !(await isAvailable(rt))) {
@@ -195,9 +181,7 @@ function installHint(lang) {
     typescript: 'ts-node: npm install -g ts-node typescript',
     python:     'Python 3: sudo apt install python3  (or: https://python.org)',
     cpp:        'GCC: sudo apt install g++  (or: xcode-select --install on Mac)',
-    go:         'Go: https://go.dev/dl  (or: sudo apt install golang)',
     java:       'JDK: sudo apt install default-jdk  (or: https://adoptium.net)',
-    rust:       'Rust: curl --proto =https --tlsv1.2 -sSf https://sh.rustup.rs | sh',
   };
   return hints[lang] || 'Check the README for installation instructions.';
 }

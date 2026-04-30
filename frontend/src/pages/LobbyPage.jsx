@@ -97,7 +97,7 @@ export default function LobbyPage() {
             <label className={s.label}>Your display name</label>
             <input
               className="input-field"
-              placeholder="e.g. Alex"
+              placeholder="NAME"
               value={name}
               onChange={e => setName(e.target.value)}
               maxLength={32}

@@ -2,7 +2,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 
-const API = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3001';
+const API = import.meta.env.VITE_BACKEND_URL || '';
 const Ctx = createContext(null);
 
 export function AuthProvider({ children }) {

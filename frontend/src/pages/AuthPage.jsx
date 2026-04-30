@@ -64,7 +64,7 @@ export default function AuthPage() {
               <input
                 className="input-field"
                 type="text"
-                placeholder="e.g. Alex"
+                placeholder="NAME"
                 value={username}
                 onChange={e => setUsername(e.target.value)}
                 maxLength={32}

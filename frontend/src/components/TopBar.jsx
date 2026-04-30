@@ -9,12 +9,10 @@ const LANGS = [
   { value:'python',     label:'Python'     },
   { value:'cpp',        label:'C++'        },
   { value:'typescript', label:'TypeScript' },
-  { value:'go',         label:'Go'         },
   { value:'java',       label:'Java'       },
-  { value:'rust',       label:'Rust'       },
 ];
 
-export default function TopBar({ roomId, language, onLangChange, onRun, isRunning, users, currentUser, connected, onStartReplay, replayOn, onSave }) {
+export default function TopBar({ roomId, language, onLangChange, onRun, isRunning, users, currentUser, connected, onSave }) {
   const navigate = useNavigate();
   const { theme, toggle } = useTheme();
   const [copied, setCopied] = useState(false);
@@ -49,11 +47,11 @@ export default function TopBar({ roomId, language, onLangChange, onRun, isRunnin
         ))}
       </div>
 
-      <select className={s.langSel} value={language} onChange={e => onLangChange(e.target.value)} disabled={replayOn}>
+      <select className={s.langSel} value={language} onChange={e => onLangChange(e.target.value)}>
         {LANGS.map(l => <option key={l.value} value={l.value}>{l.label}</option>)}
       </select>
 
-      <button className={`${s.runBtn} ${isRunning ? s.runBusy : ''}`} onClick={onRun} disabled={isRunning || replayOn}>
+      <button className={`${s.runBtn} ${isRunning ? s.runBusy : ''}`} onClick={onRun} disabled={isRunning}>
         {isRunning
           ? <><span className="spinner" style={{width:12,height:12,borderWidth:2}} /> Running…</>
           : '▶ Run'}
@@ -62,8 +60,6 @@ export default function TopBar({ roomId, language, onLangChange, onRun, isRunnin
       {onSave && (
         <button className={s.iconBtn} onClick={onSave} title="Save snippet">💾</button>
       )}
-
-      <button className={`${s.iconBtn} ${replayOn ? s.iconActive : ''}`} onClick={onStartReplay} title="Session replay">⏮</button>
 
       <button className={s.iconBtn} onClick={copyLink} title="Copy link">
         {copied ? '✓' : '🔗'}
