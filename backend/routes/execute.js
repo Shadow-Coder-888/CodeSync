@@ -113,8 +113,7 @@ router.post('/', async (req, res) => {
 
     try {
       // Use spawn via shell so compound commands (e.g. javac && java) work,
-      // but pipe stdin directly instead of using shell redirection —
-      // this correctly handles user input() / Scanner / readline calls.
+      // and pipe stdin directly so input() / Scanner / readline work correctly.
       await new Promise((resolve, reject) => {
         const child = spawn('sh', ['-c', command], {
           env: {
@@ -123,14 +122,22 @@ router.post('/', async (req, res) => {
             HOME: tmpDir,
             TMPDIR: tmpDir,
           },
-          timeout: TIMEOUT_MS,
         });
 
-        // Write stdin then close the stream so programs know EOF
-        if (stdin) {
-          child.stdin.write(stdin);
+        // Suppress EPIPE errors on stdin — happens when process exits before
+        // reading all input (e.g. compile error, or program doesn't use stdin)
+        child.stdin.on('error', (e) => { if (e.code !== 'EPIPE') reject(e); });
+
+        // Write stdin then close so the program receives EOF after all input
+        if (stdin && stdin.trim()) {
+          // Ensure every line ends with newline so input()/Scanner reads correctly
+          const stdinData = stdin.endsWith('\n') ? stdin : stdin + '\n';
+          child.stdin.write(stdinData, 'utf8', () => {
+            child.stdin.end();
+          });
+        } else {
+          child.stdin.end();
         }
-        child.stdin.end();
 
         child.stdout.on('data', chunk => {
           stdout += chunk.toString();
@@ -138,6 +145,7 @@ router.post('/', async (req, res) => {
         });
         child.stderr.on('data', chunk => {
           stderr += chunk.toString();
+          if (stderr.length > MAX_BUFFER) child.kill('SIGKILL');
         });
 
         const timer = setTimeout(() => {
@@ -146,7 +154,7 @@ router.post('/', async (req, res) => {
         }, TIMEOUT_MS);
 
         child.on('close', () => { clearTimeout(timer); resolve(); });
-        child.on('error', reject);
+        child.on('error', (e) => { clearTimeout(timer); stderr += e.message; resolve(); });
       });
     } catch (execErr) {
       stderr = stderr || execErr.message || 'Execution failed.';
