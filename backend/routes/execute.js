@@ -6,15 +6,14 @@
 
 const express  = require('express');
 const router   = express.Router();
-const { exec, execFile } = require('child_process');
+const { spawn, exec } = require('child_process');
 const { promisify } = require('util');
 const fs       = require('fs');
 const path     = require('path');
 const os       = require('os');
 const crypto   = require('crypto');
 
-const execAsync     = promisify(exec);
-const execFileAsync = promisify(execFile);
+const execAsync = promisify(exec);
 
 // ── Execution limits ───────────────────────────────────────────────────────
 const TIMEOUT_MS   = 10000;    // 10 seconds — process is killed after this
@@ -103,44 +102,58 @@ router.post('/', async (req, res) => {
   const tmpDir = path.join(os.tmpdir(), `codesync_${id}`);
   fs.mkdirSync(tmpDir, { recursive: true });
 
-  const codeFile  = path.join(tmpDir, runner.filename);
-  const stdinFile = path.join(tmpDir, 'stdin.txt');
+  const codeFile = path.join(tmpDir, runner.filename);
 
   try {
-    fs.writeFileSync(codeFile,  code,  'utf8');
-    fs.writeFileSync(stdinFile, stdin, 'utf8');
+    fs.writeFileSync(codeFile, code, 'utf8');
 
     const command = runner.runner(tmpDir);
     const start   = Date.now();
     let stdout = '', stderr = '', timedOut = false;
 
     try {
-      // Run with timeout, output cap, and stdin redirect
-      const result = await execAsync(
-        `${command} < "${stdinFile}"`,
-        {
-          timeout:   TIMEOUT_MS,
-          maxBuffer: MAX_BUFFER,
+      // Use spawn via shell so compound commands (e.g. javac && java) work,
+      // but pipe stdin directly instead of using shell redirection —
+      // this correctly handles user input() / Scanner / readline calls.
+      await new Promise((resolve, reject) => {
+        const child = spawn('sh', ['-c', command], {
           env: {
             ...process.env,
-            // Sandbox-style env: strip credentials, limit HOME
             PATH: process.env.PATH,
             HOME: tmpDir,
             TMPDIR: tmpDir,
           },
+          timeout: TIMEOUT_MS,
+        });
+
+        // Write stdin then close the stream so programs know EOF
+        if (stdin) {
+          child.stdin.write(stdin);
         }
-      );
-      stdout = result.stdout || '';
-      stderr = result.stderr || '';
+        child.stdin.end();
+
+        child.stdout.on('data', chunk => {
+          stdout += chunk.toString();
+          if (stdout.length > MAX_BUFFER) child.kill('SIGKILL');
+        });
+        child.stderr.on('data', chunk => {
+          stderr += chunk.toString();
+        });
+
+        const timer = setTimeout(() => {
+          timedOut = true;
+          child.kill('SIGKILL');
+        }, TIMEOUT_MS);
+
+        child.on('close', () => { clearTimeout(timer); resolve(); });
+        child.on('error', reject);
+      });
     } catch (execErr) {
-      if (execErr.killed || execErr.code === 'ETIMEDOUT') {
-        timedOut = true;
-        stderr   = `Time limit exceeded (${TIMEOUT_MS / 1000}s). Your code ran too long and was stopped.`;
-      } else {
-        // Non-zero exit codes (compile errors, runtime errors) land here
-        stdout = execErr.stdout || '';
-        stderr = execErr.stderr || execErr.message || 'Execution failed.';
-      }
+      stderr = stderr || execErr.message || 'Execution failed.';
+    }
+
+    if (timedOut) {
+      stderr = `Time limit exceeded (${TIMEOUT_MS / 1000}s). Your code ran too long and was stopped.`;
     }
 
     const elapsed = ((Date.now() - start) / 1000).toFixed(3);

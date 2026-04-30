@@ -135,7 +135,7 @@ export function useRoom(roomId, username, userId) {
   }, [roomId]);
 
   // Real execution — posts code to backend
-  const runCode = useCallback(async () => {
+  const runCode = useCallback(async (stdin = '') => {
     if (isRunning) return;
     socketRef.current?.emit(EV.CODE_RUN, { roomId });
     setIsRunning(true);
@@ -144,6 +144,7 @@ export function useRoom(roomId, username, userId) {
       const res = await axios.post(`${BACKEND}/api/execute`, {
         code: codeRef.current,
         language,
+        stdin,
       });
       const d = res.data;
       setOutput({

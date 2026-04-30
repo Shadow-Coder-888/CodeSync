@@ -30,6 +30,7 @@ export default function RoomPage() {
   const [panel,      setPanel]    = useState('users');
   const [cursorPos,  setCursorPos]= useState({ line: 1, col: 1 });
   const [showSave,   setShowSave] = useState(false);
+  const [stdin,      setStdin]    = useState('');
 
   if (!username) return null;
 
@@ -63,7 +64,7 @@ export default function RoomPage() {
         roomId={roomId}
         language={room.language}
         onLangChange={room.emitLang}
-        onRun={room.runCode}
+        onRun={() => room.runCode(stdin)}
         isRunning={room.isRunning}
         users={room.users}
         currentUser={room.currentUser}
@@ -93,7 +94,14 @@ export default function RoomPage() {
             remoteCursors={room.cursors}
             theme={theme}
           />
-          <OutputPanel output={room.output} isRunning={room.isRunning} runBy={room.runBy} />
+          <OutputPanel
+            output={room.output}
+            isRunning={room.isRunning}
+            runBy={room.runBy}
+            onRun={room.runCode}
+            stdin={stdin}
+            onStdinChange={setStdin}
+          />
         </div>
 
         <div className={s.rightPanel}>

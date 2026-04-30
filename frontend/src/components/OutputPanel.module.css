@@ -14,3 +14,66 @@
 .error   { color:var(--red); }
 .info    { color:var(--acc); }
 .divider { height:1px; background:var(--bd); margin:4px 0; }
+
+/* ── Input tab ── */
+.inputTab {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 100%;
+}
+.inputHint {
+  font-size: 11px;
+  color: var(--tx3);
+  line-height: 1.6;
+  padding: 4px 0;
+}
+.inputHint code {
+  background: var(--s2);
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-family: var(--mono);
+  font-size: 10px;
+}
+.stdinArea {
+  flex: 1;
+  min-height: 90px;
+  background: var(--s2);
+  border: 1px solid var(--bd2);
+  border-radius: var(--r);
+  padding: 10px;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--tx1);
+  resize: none;
+  outline: none;
+  line-height: 1.6;
+  transition: border-color .2s;
+}
+.stdinArea:focus { border-color: var(--acc); }
+.stdinArea::placeholder { color: var(--tx3); }
+
+.runFromInput {
+  background: var(--acc);
+  color: #fff;
+  border: none;
+  border-radius: var(--r);
+  padding: 7px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity .15s;
+  align-self: flex-end;
+}
+.runFromInput:hover:not(:disabled) { opacity: .85; }
+.runFromInput:disabled { opacity: .4; cursor: not-allowed; }
+
+/* dot indicator on Input tab when stdin has content */
+.inputDot {
+  display: inline-block;
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--acc);
+  margin-left: 3px;
+  vertical-align: middle;
+}
